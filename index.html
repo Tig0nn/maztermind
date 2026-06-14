@@ -186,7 +186,7 @@
       const { MemoryRouter, Routes, Route, Link, useNavigate, useParams } =
         ReactRouterDOM;
 
-      const STRIPE_CHECKOUT_URL =
+      const COMBO_CHECKOUT_URL =
         "https://buy.stripe.com/test_00wcMY3Db7tQ1VxbBZ8Ra02";
 
       const products = [
@@ -195,6 +195,7 @@
           name: "Loc Uyen's Bau Cua - Hoo Hey How",
           category: "CULTURAL HERITAGE",
           price: 129,
+          checkoutUrl: "https://buy.stripe.com/test_8x27sEa1zbK66bNeOb8Ra00",
           material: "PU Leather, MDF, UV Ink",
           images: [
             "./images/products/bau-cua/main.webp",
@@ -250,6 +251,7 @@
           edition: "Limited Edition",
           category: "LIMITED EDITION",
           price: 299,
+          checkoutUrl: "https://buy.stripe.com/test_cNi9AM0qZbK6dEf8pN8Ra01",
           material: "Beechwood, MDF, Wood Veneer",
           images: [
             "./images/products/saigonopoly/main.jpg",
@@ -335,25 +337,74 @@
       ];
 
       const WelcomeBannerModal = () => {
-        const [isVisible, setIsVisible] = useState(true);
+        // 1. Quản lý trạng thái
+        const [isVisible, setIsVisible] = React.useState(true);
+        const [email, setEmail] = React.useState("");
+        const [isSubmitted, setIsSubmitted] = React.useState(false);
+        const [error, setError] = React.useState("");
+        const [isLoading, setIsLoading] = React.useState(false);
 
-        useEffect(() => {
+        // 2. Xử lý phím Escape để đóng
+        React.useEffect(() => {
           if (!isVisible) return;
-
           const handleKeyDown = (event) => {
             if (event.key === "Escape") {
               setIsVisible(false);
             }
           };
-
           document.body.style.overflow = "hidden";
           window.addEventListener("keydown", handleKeyDown);
-
           return () => {
             document.body.style.overflow = "";
             window.removeEventListener("keydown", handleKeyDown);
           };
         }, [isVisible]);
+
+        // 3. Hàm xử lý Logic gọi API SheetDB
+        const handleSignUp = async (event) => {
+          event.preventDefault();
+          if (!email.includes("@") || !email.includes(".")) {
+            setError("Vui lòng nhập email hợp lệ.");
+            return;
+          }
+
+          setIsLoading(true);
+          setError("");
+
+          try {
+            // BƯỚC 1: GET - Đọc dữ liệu từ Sheets
+            // THAY ĐƯỜNG LINK NÀY BẰNG LINK SHEETDB CỦA BẠN
+            const SHEETDB_URL = "https://sheetdb.io/api/v1/0mqrcsuyxij77";
+
+            const response = await fetch(SHEETDB_URL);
+            const data = await response.json();
+
+            const isDuplicate = data.some((row) => row.Email === email);
+
+            if (isDuplicate) {
+              setError("This email has already received a discount code!");
+              setIsLoading(false);
+            } else {
+              // BƯỚC 2: POST - Ghi email mới vào Sheets
+              await fetch(SHEETDB_URL, {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  data: [{ Email: email, Date: new Date().toLocaleString() }],
+                }),
+              });
+
+              setIsSubmitted(true); // Đổi giao diện sang hiện mã
+              setIsLoading(false);
+            }
+          } catch (err) {
+            setError("System is busy, please try again later.");
+            setIsLoading(false);
+          }
+        };
 
         if (!isVisible) return null;
 
@@ -369,6 +420,7 @@
               className="relative grid w-full max-w-[920px] overflow-hidden rounded bg-[#8fb6c8] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.45)] md:grid-cols-12"
               onClick={(event) => event.stopPropagation()}
             >
+              {/* Nút Close */}
               <button
                 onClick={() => setIsVisible(false)}
                 className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-charcoal-ink/80 text-white shadow-sm transition-opacity hover:opacity-80"
@@ -378,6 +430,8 @@
                   close
                 </span>
               </button>
+
+              {/* CỘT TRÁI: Hình ảnh */}
               <div className="hidden min-h-[420px] bg-[#173b5e] md:block md:col-span-7">
                 <img
                   alt="Maztermind artisanal masterpieces banner"
@@ -385,7 +439,9 @@
                   src="./images/logo.jpg"
                 />
               </div>
-              <div className="flex min-h-[420px] flex-col justify-center px-6 py-20 text-center sm:px-12 md:px-10 md:col-span-5">
+
+              {/* CỘT PHẢI: Logic hiển thị thay đổi theo isSubmitted */}
+              <div className="flex min-h-[420px] flex-col justify-center px-6 py-20 text-center sm:px-12 md:px-10 md:col-span-5 relative">
                 <p
                   id="welcome-banner-title"
                   className="font-display-lg text-[44px] leading-[48px] text-white sm:text-[56px] sm:leading-[60px]"
@@ -394,27 +450,52 @@
                   <br />
                   GIFT: 10% OFF
                 </p>
-                <form
-                  className="mt-12 flex flex-col gap-4"
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                    setIsVisible(false);
-                  }}
-                >
-                  <input
-                    className="h-12 w-full bg-white px-4 font-body-md text-body-md text-primary"
-                    placeholder="Email"
-                    type="email"
-                    aria-label="Email"
-                    required
-                  />
-                  <button
-                    className="h-12 w-full bg-black px-4 font-headline-md text-[24px] leading-none text-white transition-opacity hover:opacity-90"
-                    type="submit"
+
+                {!isSubmitted ? (
+                  /* TRẠNG THÁI 1: FORM NHẬP EMAIL */
+                  <form
+                    className="mt-12 flex flex-col gap-4"
+                    onSubmit={handleSignUp}
                   >
-                    SIGN UP NOW
-                  </button>
-                </form>
+                    <input
+                      className={`h-12 w-full bg-white px-4 font-body-md text-body-md text-primary focus:outline-none ${error ? "border-2 border-red-500" : ""}`}
+                      placeholder="Email"
+                      type="text" // Chuyển thành text để tự xử lý custom error tốt hơn
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      aria-label="Email"
+                    />
+                    {error && (
+                      <p className="text-red-600 font-bold text-sm bg-white/80 rounded py-1">
+                        {error}
+                      </p>
+                    )}
+
+                    <button
+                      className="h-12 w-full bg-black px-4 font-headline-md text-[24px] leading-none text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                      type="submit"
+                      disabled={isLoading}
+                    >
+                      {isLoading ? "PROCESSING..." : "SIGN UP NOW"}
+                    </button>
+                  </form>
+                ) : (
+                  /* TRẠNG THÁI 2: HIỂN THỊ MÃ GIẢM GIÁ (Thêm animate-fade-in để mượt mà) */
+                  <div className="mt-12 flex flex-col items-center gap-4 animate-fade-in">
+                    <p className="text-white font-body-lg text-lg">
+                      Email confirmed! Use this code at checkout:
+                    </p>
+                    <div className="bg-white text-charcoal-ink px-8 py-4 font-bold text-3xl tracking-widest border-4 border-dashed border-charcoal-ink">
+                      WELCOME10
+                    </div>
+                    <button
+                      onClick={() => setIsVisible(false)}
+                      className="mt-4 underline text-white hover:text-white/80 transition-colors"
+                    >
+                      Start Shopping
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -545,7 +626,7 @@
                         <img
                           alt={item.name}
                           className="h-[88px] w-[88px] rounded object-cover"
-                          src={item.image}
+                          src={item.images[0]}
                         />
                         <div>
                           <p className="font-label-sm text-label-sm text-on-surface-variant">
@@ -1207,7 +1288,11 @@
 
         const checkoutOnStripe = () => {
           if (cartItems.length === 0) return;
-          window.location.href = STRIPE_CHECKOUT_URL;
+          const checkoutUrl =
+            cartItems.length > 1
+              ? COMBO_CHECKOUT_URL
+              : cartItems[0].checkoutUrl;
+          window.location.href = checkoutUrl;
         };
 
         return (
