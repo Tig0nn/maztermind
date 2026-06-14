@@ -820,8 +820,13 @@
         );
       };
 
-      const HomePage = ({ cartCount, onCartOpen }) => {
+      const HomePage = ({ cartCount, onCartOpen, onAddToCart }) => {
         const navigate = useNavigate();
+        const quickAdd = (event, product) => {
+          event.stopPropagation();
+          onAddToCart(product);
+        };
+
         return (
           <div className="flex flex-col min-h-screen">
             <SmallMarquee />
@@ -864,6 +869,15 @@
                           : products[0].image
                       }
                     />
+                    <button
+                      onClick={(event) => quickAdd(event, products[0])}
+                      className="absolute bottom-5 right-5 flex h-12 w-12 items-center justify-center rounded border border-outline/20 bg-white/95 text-primary shadow-[0_12px_28px_-14px_rgba(26,26,26,0.45)] transition-all hover:bg-burnished-gold hover:text-charcoal-ink md:translate-y-3 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100"
+                      aria-label={`Quick add ${products[0].name} to cart`}
+                    >
+                      <span className="material-symbols-outlined text-[22px]">
+                        add_shopping_cart
+                      </span>
+                    </button>
                   </div>
                   <div className="flex justify-between items-start">
                     <div>
@@ -895,6 +909,15 @@
                           : products[1].image
                       }
                     />
+                    <button
+                      onClick={(event) => quickAdd(event, products[1])}
+                      className="absolute bottom-5 right-5 flex h-12 w-12 items-center justify-center rounded border border-outline/20 bg-white/95 text-primary shadow-[0_12px_28px_-14px_rgba(26,26,26,0.45)] transition-all hover:bg-burnished-gold hover:text-charcoal-ink md:translate-y-3 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100"
+                      aria-label={`Quick add ${products[1].name} to cart`}
+                    >
+                      <span className="material-symbols-outlined text-[22px]">
+                        add_shopping_cart
+                      </span>
+                    </button>
                   </div>
                   <div className="flex justify-between items-start">
                     <div>
@@ -1312,6 +1335,7 @@
                   <HomePage
                     cartCount={cartItems.length}
                     onCartOpen={() => setIsCartOpen(true)}
+                    onAddToCart={addToCart}
                   />
                 }
               />
