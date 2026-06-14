@@ -1,0 +1,1271 @@
+<!doctype html>
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Maztermind Singapore</title>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-container": "#79542a",
+              "surface-tint": "#5f5e5e",
+              tertiary: "#161408",
+              "surface-container-high": "#e8e8e8",
+              "primary-fixed": "#e4e2e1",
+              "inverse-surface": "#2f3131",
+              "secondary-fixed": "#ffdcbc",
+              "surface-container-low": "#f3f3f3",
+              "surface-container": "#eeeeee",
+              "on-tertiary-fixed-variant": "#494737",
+              "on-background": "#1a1c1c",
+              "error-container": "#ffdad6",
+              "tertiary-fixed-dim": "#cbc7b2",
+              background: "#f9f9f9",
+              "on-primary-fixed": "#1b1c1c",
+              "on-surface-variant": "#444748",
+              "surface-variant": "#e2e2e2",
+              outline: "#747878",
+              "on-primary": "#ffffff",
+              "on-tertiary-fixed": "#1d1c0f",
+              "secondary-container": "#ffcb97",
+              error: "#ba1a1a",
+              "surface-dim": "#dadada",
+              "outline-variant": "#c4c7c7",
+              "secondary-fixed-dim": "#efbd8a",
+              "surface-bright": "#f9f9f9",
+              "on-primary-container": "#908f8e",
+              "burnished-gold": "#C5A059",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-highest": "#e2e2e2",
+              "inverse-primary": "#c8c6c5",
+              "charcoal-ink": "#1A1A1A",
+              "inverse-on-surface": "#f0f1f1",
+              "on-tertiary": "#ffffff",
+              "tertiary-container": "#2a291b",
+              "on-primary-fixed-variant": "#474746",
+              "on-tertiary-container": "#93907d",
+              "on-error": "#ffffff",
+              secondary: "#7d562d",
+              "on-secondary-fixed-variant": "#623f18",
+              "tertiary-fixed": "#e8e3cd",
+              surface: "#f9f9f9",
+              primary: "#131414",
+              "deep-walnut": "#4A3114",
+              "on-secondary": "#ffffff",
+              "primary-container": "#282828",
+              "on-secondary-fixed": "#2c1700",
+              "on-error-container": "#93000a",
+              "on-surface": "#1a1c1c",
+              "primary-fixed-dim": "#c8c6c5",
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              "section-padding-mobile": "64px",
+              unit: "8px",
+              gutter: "24px",
+              "container-max": "1280px",
+              "section-padding-desktop": "120px",
+            },
+            fontFamily: {
+              "display-lg": ["EB Garamond"],
+              "label-sm": ["Hanken Grotesk"],
+              "headline-md": ["EB Garamond"],
+              "headline-lg-mobile": ["EB Garamond"],
+              "body-lg": ["Hanken Grotesk"],
+              "headline-lg": ["EB Garamond"],
+              "title-lg": ["Hanken Grotesk"],
+              "body-md": ["Hanken Grotesk"],
+            },
+            fontSize: {
+              "display-lg": [
+                "64px",
+                {
+                  lineHeight: "72px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "500",
+                },
+              ],
+              "label-sm": [
+                "12px",
+                {
+                  lineHeight: "16px",
+                  letterSpacing: "0.1em",
+                  fontWeight: "700",
+                },
+              ],
+              "headline-md": [
+                "28px",
+                { lineHeight: "36px", fontWeight: "400" },
+              ],
+              "headline-lg-mobile": [
+                "32px",
+                { lineHeight: "40px", fontWeight: "500" },
+              ],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "headline-lg": [
+                "40px",
+                { lineHeight: "48px", fontWeight: "500" },
+              ],
+              "title-lg": [
+                "20px",
+                {
+                  lineHeight: "28px",
+                  letterSpacing: "0.05em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 300,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .material-symbols-outlined[data-weight="fill"] {
+        font-variation-settings: "FILL" 1;
+      }
+      input[type="radio"]:checked {
+        background-color: #131414;
+        border-color: #131414;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"] {
+        border: 1px solid rgba(26, 26, 26, 0.1);
+      }
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="tel"]:focus {
+        outline: none;
+        border-color: #1a1a1a;
+        box-shadow: none;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background text-on-background font-body-md text-body-md antialiased selection:bg-burnished-gold selection:text-white"
+  >
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+      const { createRoot } = ReactDOM;
+      const { MemoryRouter, Routes, Route, Link, useNavigate, useParams } =
+        ReactRouterDOM;
+
+      const STRIPE_CHECKOUT_URL =
+        "https://buy.stripe.com/test_00wcMY3Db7tQ1VxbBZ8Ra02";
+
+      const products = [
+        {
+          id: "bau-cua",
+          name: "Loc Uyen's Bau Cua - Hoo Hey How",
+          category: "CULTURAL HERITAGE",
+          price: 129,
+          material: "PU Leather, MDF, UV Ink",
+          images: [
+            "./images/products/bau-cua/main.webp",
+            "./images/products/bau-cua/detail-1.jpg",
+            "./images/products/bau-cua/detail-2.webp",
+            "./images/products/bau-cua/detail-3.webp",
+            "./images/products/bau-cua/detail-4.webp",
+          ],
+          featureSection: {
+            image: "./images/products/bau-cua/feature.webp",
+            title: "Tet Made Perfect in Moments of Reunion",
+            description:
+              "Unlike ordinary Bầu Cua Tôm Cá sets, Bầu Cua Lộc Uyển is the culmination of premium materials and meticulous handcrafted artistry. From sturdy chipboard to a water-resistant PU leather surface, every detail is carefully refined by artisans to create a product that is both aesthetically rich and durable, offering a complete and enjoyable playing experience. Let the laughter bring us closer together, making Bầu Cua Lộc Uyển a bridge of connection during joyful Tet gatherings.",
+          },
+          giftSection: {
+            image: "./images/products/bau-cua/gift-box.webp",
+            title: "A New Year’s Gift That Says It All",
+            description:
+              "Embracing a modernized beauty of culture, Bầu Cua Lộc Uyển carries heartfelt wishes for a prosperous and peaceful New Year. Gather with your loved ones around Maztermind’s Bầu Cua Tôm Cá this spring, so that every moment of connection is cherished and every expression of love is shared through this thoughtful gift.",
+          },
+          description:
+            "Inspired by the royal Huế Blue Enamel paintings, Maztermind has skillfully combined and reimagined these colors to create Bầu Cua Lộc Uyển. Where stories of reunion are highlighted with a contemporary touch, let this Bầu Cua Tôm Cá set bring you a complete and meaningful Tet celebration — both fresh and heartfelt, like a perfect New Year’s blessing!",
+          specifications: [
+            {
+              label: "Material",
+              items: [
+                "Hoo Hey How board: PU leather, MDF, UV ink",
+                "Dice: Resin, UV ink",
+                "Dice bag: Canvas",
+              ],
+            },
+            {
+              label: "Components",
+              items: ["1 Hoo Hey How board", "3 dice", "1 dice bag"],
+            },
+            {
+              label: "Dimensions",
+              items: [
+                "Hoo Hey How box: 210x660mm",
+                "Hoo Hey How board: 595x395x5mm",
+                "Dice: 25x25x25mm",
+              ],
+            },
+            {
+              label: "Weight",
+              items: ["Total product 0.65kg"],
+            },
+          ],
+        },
+        {
+          id: "saigon-monopoly",
+          name: "Saigon wooden Monopoly",
+          edition: "Limited Edition",
+          category: "LIMITED EDITION",
+          price: 299,
+          material: "Beechwood, MDF, Wood Veneer",
+          images: [
+            "./images/products/saigonopoly/main.jpg",
+            "./images/products/saigonopoly/detail-1.webp",
+            "./images/products/saigonopoly/detail-2.webp",
+            "./images/products/saigonopoly/detail-3.webp",
+            "./images/products/saigonopoly/detail-4.webp",
+          ],
+          featureSection: {
+            image: "./images/products/saigonopoly/feature.webp",
+            title: "Bringing everyone closer",
+            description:
+              "Saigonopoly is more than just a game; it will shorten your distance with everyone, making your time well spent and valuable. In those family and friend reunions, a good story along with a good game should always be counted.",
+          },
+          giftSection: {
+            image: "./images/products/saigonopoly/gift-box.webp",
+            title: "An ideal “anywhere - anyone” gift",
+            description:
+              "Having such a rigorous look is suitable for any occasion in giving your favorite people such a board game but with “style”. A carefully crafted board game like Saigonopoly will be the perfect idea to upgrade your personal life space. Home should not only be defined as a place to stay but also a place to reflect the owner's lifestyle, tastes and soul.",
+          },
+          description:
+            "Belonging to the Signature Collection - the very first collection of Maztermind, our product carries the original and distinctive design style of the brand, which is the exquisite harmony of the classic and elegance from the Victorian decorative arts, combined with the rustic beauty of the Industrial interior design.",
+          specifications: [
+            {
+              label: "Materials",
+              items: [
+                "Beechwood, MDF board, wood veneer, magnet, art paper and plastic",
+              ],
+            },
+            {
+              label: "Components",
+              items: [
+                "1 wooden board, 8 tokens of stools, 1 set tokens of houses, 28 cards of properties, 16 cards of lottery, 16 cards of lucky draw, money pack and 2 dice.",
+              ],
+            },
+            {
+              label: "Dimensions",
+              items: [
+                "Wooden board: L518 x W518 x H16 mm (L20.4 x W20.4 x H0.63 inch)",
+              ],
+            },
+            {
+              label: "Weight",
+              items: [
+                "Total weight: 2.4kg (~5.29 lbs)",
+                "Weight including package: 3.4kg (~7.5 lbs)",
+              ],
+            },
+          ],
+        },
+      ];
+
+      const formatPrice = (amount) => `SGD ${amount}`;
+      const bannerImage = "./images/banner.jpg";
+      const aboutImages = {
+        hero: "./images/about-us-back.webp",
+        workshop: "./images/about-us-1.webp",
+        tools: "./images/about-us-2.webp",
+        craft: "./images/about-us-3.webp",
+        play: "./images/about-us-4webp.webp",
+        aesthetic: "./images/about-us-5.webp",
+      };
+
+      const coreValues = [
+        {
+          title: "CRAFTSMANSHIP",
+          image: aboutImages.craft,
+          description:
+            "From turning raw materials into high-quality pieces, our crafting process combines traditional values and contemporary design that commits to delivering the finest craft products.",
+        },
+        {
+          title: "CONNECTIVITY",
+          image: aboutImages.play,
+          description:
+            "To us, board games are not simply for entertainment. They spread joy and bring people closer together. We hope to inspire you to collect memories that last longer, feel deeper, and touch further.",
+        },
+        {
+          title: "AESTHETIC",
+          image: aboutImages.aesthetic,
+          description:
+            "More than a game, every piece embodies a sense of art blending with rational functionality. A pleasure both to play and display, our board games are striking showpieces for any interior.",
+        },
+      ];
+
+      const WelcomeBannerModal = () => {
+        const [isVisible, setIsVisible] = useState(true);
+
+        useEffect(() => {
+          if (!isVisible) return;
+
+          const handleKeyDown = (event) => {
+            if (event.key === "Escape") {
+              setIsVisible(false);
+            }
+          };
+
+          document.body.style.overflow = "hidden";
+          window.addEventListener("keydown", handleKeyDown);
+
+          return () => {
+            document.body.style.overflow = "";
+            window.removeEventListener("keydown", handleKeyDown);
+          };
+        }, [isVisible]);
+
+        if (!isVisible) return null;
+
+        return (
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-charcoal-ink/60 px-4 py-8"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="welcome-banner-title"
+            onClick={() => setIsVisible(false)}
+          >
+            <div
+              className="relative grid w-full max-w-[920px] overflow-hidden rounded bg-[#8fb6c8] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.45)] md:grid-cols-12"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                onClick={() => setIsVisible(false)}
+                className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-charcoal-ink/80 text-white shadow-sm transition-opacity hover:opacity-80"
+                aria-label="Close welcome banner"
+              >
+                <span className="material-symbols-outlined text-[22px]">
+                  close
+                </span>
+              </button>
+              <div className="hidden min-h-[420px] bg-[#173b5e] md:block md:col-span-7">
+                <img
+                  alt="Maztermind artisanal masterpieces banner"
+                  className="h-full w-full object-cover"
+                  src="./images/logo.jpg"
+                />
+              </div>
+              <div className="flex min-h-[420px] flex-col justify-center px-6 py-20 text-center sm:px-12 md:px-10 md:col-span-5">
+                <p
+                  id="welcome-banner-title"
+                  className="font-display-lg text-[44px] leading-[48px] text-white sm:text-[56px] sm:leading-[60px]"
+                >
+                  WELCOME
+                  <br />
+                  GIFT: 10% OFF
+                </p>
+                <form
+                  className="mt-12 flex flex-col gap-4"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    setIsVisible(false);
+                  }}
+                >
+                  <input
+                    className="h-12 w-full bg-white px-4 font-body-md text-body-md text-primary"
+                    placeholder="Email"
+                    type="email"
+                    aria-label="Email"
+                    required
+                  />
+                  <button
+                    className="h-12 w-full bg-black px-4 font-headline-md text-[24px] leading-none text-white transition-opacity hover:opacity-90"
+                    type="submit"
+                  >
+                    SIGN UP NOW
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        );
+      };
+      const TopNav = ({ variant = "default", cartCount = 0, onCartOpen }) => {
+        const [isScrolled, setIsScrolled] = useState(false);
+
+        useEffect(() => {
+          const handleScroll = () => setIsScrolled(window.scrollY > 10);
+          window.addEventListener("scroll", handleScroll);
+          return () => window.removeEventListener("scroll", handleScroll);
+        }, []);
+
+        if (variant === "checkout") {
+          return (
+            <header
+              className={`bg-background dark:bg-charcoal-ink flex justify-between items-center px-gutter py-unit w-full max-w-container-max mx-auto z-50`}
+            >
+              <Link
+                to="/"
+                className="text-title-lg font-title-lg text-primary dark:text-primary-fixed tracking-[0.1em]"
+              >
+                maztermind
+              </Link>
+              <div className="flex items-center text-on-surface-variant font-label-sm text-label-sm">
+                SECURE CHECKOUT
+                <span
+                  className="material-symbols-outlined ml-2 text-primary"
+                  style={{ fontVariationSettings: "'FILL' 1" }}
+                >
+                  lock
+                </span>
+              </div>
+            </header>
+          );
+        }
+
+        return (
+          <nav
+            className={`bg-background dark:bg-charcoal-ink flex justify-between items-center px-gutter w-full max-w-container-max mx-auto top-0 z-50 sticky transition-all duration-300 ${isScrolled ? "py-2 shadow-sm" : "py-unit"}`}
+          >
+            <div className="flex items-center gap-8">
+              <Link
+                to="/"
+                className="text-title-lg font-title-lg text-primary dark:text-primary-fixed tracking-[0.1em]"
+              >
+                maztermind
+              </Link>
+              <div className="hidden md:flex gap-6">
+                <Link
+                  className="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed transition-colors font-body-md text-body-md hover:opacity-80 transition-opacity"
+                  to="/our-story"
+                >
+                  Our Story
+                </Link>
+              </div>
+            </div>
+            <button
+              onClick={onCartOpen}
+              className="relative flex h-11 w-11 items-center justify-center rounded border border-outline/20 bg-surface-container-low text-primary transition-opacity hover:opacity-80"
+              aria-label={`Open cart with ${cartCount} item${cartCount === 1 ? "" : "s"}`}
+            >
+              <span className="material-symbols-outlined text-[22px]">
+                shopping_bag
+              </span>
+              {cartCount > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-6 min-w-6 items-center justify-center rounded-full bg-burnished-gold px-1.5 font-label-sm text-[11px] leading-none text-charcoal-ink">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          </nav>
+        );
+      };
+
+      const CartDrawer = ({ isOpen, items, onClose, onRemove, onCheckout }) => {
+        const total = items.reduce((sum, item) => sum + item.price, 0);
+
+        if (!isOpen) return null;
+
+        return (
+          <div
+            className="fixed inset-0 z-[90] bg-charcoal-ink/50"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cart-title"
+            onClick={onClose}
+          >
+            <aside
+              className="ml-auto flex h-full w-full max-w-[420px] flex-col bg-background shadow-[0_24px_80px_-20px_rgba(0,0,0,0.45)]"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex items-center justify-between border-b border-outline/10 px-6 py-5">
+                <h2
+                  id="cart-title"
+                  className="font-title-lg text-title-lg text-primary"
+                >
+                  Your Cart
+                </h2>
+                <button
+                  onClick={onClose}
+                  className="flex h-10 w-10 items-center justify-center rounded border border-outline/20 transition-opacity hover:opacity-75"
+                  aria-label="Close cart"
+                >
+                  <span className="material-symbols-outlined text-[22px]">
+                    close
+                  </span>
+                </button>
+              </div>
+              <div className="flex-1 overflow-y-auto px-6 py-6">
+                {items.length === 0 ? (
+                  <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
+                    <span className="material-symbols-outlined text-[40px] text-on-surface-variant">
+                      shopping_bag
+                    </span>
+                    <p className="font-body-md text-body-md text-on-surface-variant">
+                      Your cart is empty.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-5">
+                    {items.map((item) => (
+                      <div
+                        key={item.id}
+                        className="grid grid-cols-[88px_1fr_auto] gap-4 border-b border-outline/10 pb-5"
+                      >
+                        <img
+                          alt={item.name}
+                          className="h-[88px] w-[88px] rounded object-cover"
+                          src={item.image}
+                        />
+                        <div>
+                          <p className="font-label-sm text-label-sm text-on-surface-variant">
+                            {item.category}
+                          </p>
+                          <h3 className="mt-1 font-body-md text-body-md text-primary">
+                            {item.name}
+                          </h3>
+                          <p className="mt-2 font-body-md text-body-md text-deep-walnut">
+                            {formatPrice(item.price)}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => onRemove(item.id)}
+                          className="flex h-9 w-9 items-center justify-center rounded text-on-surface-variant transition-opacity hover:opacity-70"
+                          aria-label={`Remove ${item.name}`}
+                        >
+                          <span className="material-symbols-outlined text-[20px]">
+                            delete
+                          </span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="border-t border-outline/10 px-6 py-6">
+                <div className="mb-5 flex items-center justify-between">
+                  <span className="font-label-sm text-label-sm text-on-surface-variant">
+                    SUBTOTAL
+                  </span>
+                  <span className="font-title-lg text-title-lg text-primary">
+                    {formatPrice(total)}
+                  </span>
+                </div>
+                <button
+                  onClick={onCheckout}
+                  disabled={items.length === 0}
+                  className="flex w-full items-center justify-center gap-2 rounded bg-burnished-gold px-8 py-4 font-label-sm text-label-sm uppercase text-charcoal-ink shadow-sm transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <span className="material-symbols-outlined text-[18px]">
+                    lock
+                  </span>
+                  Checkout on Stripe
+                </button>
+              </div>
+            </aside>
+          </div>
+        );
+      };
+
+      const Footer = ({ variant = "default" }) => {
+        return (
+          <footer className="bg-surface-container-low dark:bg-tertiary-container border-t border-outline/10 dark:border-outline-variant/10 grid grid-cols-1 md:grid-cols-12 gap-gutter px-gutter py-section-padding-desktop w-full max-w-container-max mx-auto bottom-0 mt-auto">
+            <div className="md:col-span-4 flex flex-col gap-6">
+              <span className="font-display-lg text-display-lg text-burnished-gold">
+                maztermind
+              </span>
+              <p className="font-body-md text-body-md text-on-surface-variant dark:text-on-tertiary-container max-w-sm">
+                Redefining cultural pastimes through the lens of modern luxury
+                and heritage craftsmanship.
+              </p>
+            </div>
+            <div className="md:col-span-2 md:col-start-7 flex flex-col gap-4">
+              <span className="font-label-sm text-label-sm text-primary dark:text-tertiary-fixed">
+                EXPLORE
+              </span>
+              <a
+                className="font-body-md text-body-md text-on-surface-variant dark:text-on-tertiary-container hover:text-burnished-gold transition-colors opacity-60 hover:opacity-100"
+                href="#"
+              >
+                Shipping Info
+              </a>
+              <a
+                className="font-body-md text-body-md text-on-surface-variant dark:text-on-tertiary-container hover:text-burnished-gold transition-colors opacity-60 hover:opacity-100"
+                href="#"
+              >
+                Local SG Contact
+              </a>
+            </div>
+            <div className="md:col-span-2 flex flex-col gap-4">
+              <span className="font-label-sm text-label-sm text-primary dark:text-tertiary-fixed">
+                LEGAL
+              </span>
+              <a
+                className="font-body-md text-body-md text-on-surface-variant dark:text-on-tertiary-container hover:text-burnished-gold transition-colors opacity-60 hover:opacity-100"
+                href="#"
+              >
+                Terms of Service
+              </a>
+              <a
+                className="font-body-md text-body-md text-on-surface-variant dark:text-on-tertiary-container hover:text-burnished-gold transition-colors opacity-60 hover:opacity-100"
+                href="#"
+              >
+                Newsletter
+              </a>
+            </div>
+            <div className="md:col-span-12 mt-16 pt-8 border-t border-outline/10 dark:border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="font-label-sm text-label-sm text-on-surface-variant dark:text-on-tertiary-container opacity-60">
+                © 2024 maztermind SINGAPORE. ARTISANAL CRAFTSMANSHIP.
+              </p>
+              <div className="flex gap-4 opacity-60 hover:opacity-100 transition-opacity">
+                <span className="material-symbols-outlined text-[24px]">
+                  payments
+                </span>
+                <span className="material-symbols-outlined text-[24px]">
+                  credit_card
+                </span>
+              </div>
+            </div>
+          </footer>
+        );
+      };
+
+      const SmallMarquee = () => {
+        return (
+          <div className="w-full bg-charcoal-ink text-white overflow-hidden py-2.5">
+            <style>
+              {`
+          @keyframes marquee-small {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+          }
+          .animate-marquee-small {
+            display: flex;
+            white-space: nowrap;
+            /* Thay đổi 15s thành số lớn hơn nếu muốn chữ chạy chậm lại */
+            animation: marquee-small 15s linear infinite;
+          }
+        `}
+            </style>
+
+            <div className="animate-marquee-small w-max">
+              {/* Lặp lại 6 lần để đảm bảo chạy mượt trên cả màn hình siêu rộng */}
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="flex items-center">
+                  <span className="font-label-sm text-xs md:text-sm uppercase tracking-widest px-8">
+                    House of Artisan Board Games
+                  </span>
+                  <span className="text-burnished-gold text-[10px] px-2">
+                    ✦
+                  </span>
+                  <span className="font-label-sm text-xs md:text-sm uppercase tracking-widest px-8">
+                    Play in style
+                  </span>
+                  <span className="text-burnished-gold text-[10px] px-2">
+                    ✦
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      const ScrollingText = () => {
+        return (
+          <section className="w-full overflow-hidden py-12 md:py-20 bg-surface-container-low border-y border-outline/20 my-16">
+            {/* Khai báo keyframes CSS trực tiếp để không cần đụng vào file config */}
+            <style>
+              {`
+          @keyframes marquee {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+          }
+          .animate-marquee-ltr {
+            display: flex;
+            white-space: nowrap;
+            /* Chạy từ trái sang phải (Left-to-Right). Đổi thành -15s nếu muốn nhanh/chậm hơn */
+            animation: marquee 20s linear infinite;
+          }
+        `}
+            </style>
+
+            <div className="animate-marquee-ltr w-max">
+              {/* Lặp lại cụm chữ 4 lần để màn hình to cỡ nào cũng không bị đứt quãng */}
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center">
+                  <h2 className="font-headline-lg text-5xl md:text-7xl text-deep-walnut px-8">
+                    House of Artisan Board Games
+                  </h2>
+                  <span className="text-3xl text-primary/50 px-4">✦</span>
+                  <h2 className="font-headline-lg text-5xl md:text-7xl text-deep-walnut px-8">
+                    Play in style
+                  </h2>
+                  <span className="text-3xl text-primary/50 px-4">✦</span>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      };
+
+      const HomePage = ({ cartCount, onCartOpen }) => {
+        const navigate = useNavigate();
+        return (
+          <div className="flex flex-col min-h-screen">
+            <SmallMarquee />
+            <TopNav cartCount={cartCount} onCartOpen={onCartOpen} />
+            <header className="w-full max-w-container-max mx-auto px-gutter py-8 md:py-12">
+              <div className="relative overflow-hidden rounded bg-charcoal-ink shadow-[0_32px_64px_-12px_rgba(26,26,26,0.14)]">
+                <img
+                  alt="Maztermind play in style artisanal masterpieces"
+                  className="block w-full object-cover"
+                  src={bannerImage}
+                />
+              </div>
+            </header>
+
+            <section className="w-full max-w-container-max mx-auto px-gutter py-section-padding-mobile md:py-section-padding-desktop">
+              <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                <div className="max-w-xl">
+                  <h2 className="font-headline-lg text-headline-lg text-primary mb-4">
+                    Curated Masterpieces
+                  </h2>
+                  <p className="font-body-md text-body-md text-on-surface-variant">
+                    Each piece in our collection is a testament to meticulous
+                    design and uncompromising quality, transforming cultural
+                    pastimes into heirloom artifacts.
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+                <article
+                  className="md:col-span-7 group cursor-pointer"
+                  onClick={() => navigate(`/product/${products[0].id}`)}
+                >
+                  <div className="w-full aspect-[4/3] overflow-hidden rounded mb-6 bg-surface-container-low relative">
+                    <img
+                      alt="Loc Uyen's Bau Cua - Hoo Hey How"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      src={
+                        products[0].images
+                          ? products[0].images[0]
+                          : products[0].image
+                      }
+                    />
+                  </div>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">
+                        {products[0].category}
+                      </p>
+                      <h3 className="font-headline-md text-headline-md text-primary">
+                        {products[0].name}
+                      </h3>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-body-lg text-body-lg text-deep-walnut">
+                        {formatPrice(products[0].price)}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+                <article
+                  className="md:col-span-5 group cursor-pointer mt-8 md:mt-0 md:pt-32"
+                  onClick={() => navigate(`/product/${products[1].id}`)}
+                >
+                  <div className="w-full aspect-square overflow-hidden rounded mb-6 bg-surface-container-low relative">
+                    <img
+                      alt="Saigon wooden Monopoly"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      src={
+                        products[1].images
+                          ? products[1].images[0]
+                          : products[1].image
+                      }
+                    />
+                  </div>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="font-label-sm text-label-sm text-on-surface-variant mb-1">
+                        {products[1].category}
+                      </p>
+                      <h3 className="font-headline-md text-headline-md text-primary">
+                        {products[1].name}
+                      </h3>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-body-lg text-body-lg text-deep-walnut">
+                        {formatPrice(products[1].price)}
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </section>
+            <Footer />
+          </div>
+        );
+      };
+
+      const OurStoryPage = ({ cartCount, onCartOpen }) => {
+        return (
+          <div className="flex min-h-screen flex-col bg-background">
+            <SmallMarquee />
+            <TopNav cartCount={cartCount} onCartOpen={onCartOpen} />
+            <main className="flex-grow">
+              <section className="w-full max-w-container-max mx-auto px-gutter pb-16 md:pb-24">
+                <div className="relative min-h-[420px] overflow-hidden rounded bg-charcoal-ink md:min-h-[610px]">
+                  <img
+                    alt="Maztermind chess pieces arranged on a crafted board"
+                    className="absolute inset-0 h-full w-full object-cover"
+                    src={aboutImages.hero}
+                  />
+                  <div className="absolute inset-0 bg-charcoal-ink/35"></div>
+                  <div className="relative flex min-h-[420px] items-end justify-center px-6 pb-20 text-center md:min-h-[610px] md:pb-28">
+                    <h1 className="font-display-lg text-[48px] leading-[56px] text-white md:text-display-lg">
+                      ABOUT MAZTERMIND
+                    </h1>
+                  </div>
+                </div>
+              </section>
+
+              <section className="w-full max-w-container-max mx-auto px-gutter py-12 md:py-20">
+                <h2 className="text-center font-headline-lg text-[44px] leading-[52px] text-primary md:text-[56px] md:leading-[64px]">
+                  OUR STORY
+                </h2>
+                <div className="mx-auto mt-14 grid max-w-[1120px] border-b border-outline-variant text-center">
+                  <button className="border-b-2 border-primary pb-5 font-title-lg text-[18px] leading-7 text-primary">
+                    About Maztermind
+                  </button>
+                </div>
+              </section>
+
+              <section className="w-full max-w-container-max mx-auto px-gutter py-12 md:py-20">
+                <div className="grid grid-cols-1 items-end gap-10 md:grid-cols-12 md:gap-gutter">
+                  <div className="md:col-span-6">
+                    <img
+                      alt="Maztermind artisan working on handcrafted game pieces"
+                      className="h-[420px] w-full object-cover md:h-[560px]"
+                      src={aboutImages.workshop}
+                    />
+                  </div>
+                  <div className="md:col-span-5 md:col-start-8 md:pb-8">
+                    <h3 className="font-headline-lg text-[42px] leading-[48px] text-primary md:text-[56px] md:leading-[64px]">
+                      Recreate board games as an art of play
+                    </h3>
+                    <p className="mt-8 font-body-lg text-body-lg text-on-surface-variant">
+                      From the skilful hands of Vietnamese craftsmen to your
+                      playing table, each Maztermind's set is designed to turn
+                      every game into a new form of playing - The Art of Play.
+                      We don't make games, we create beauty and experience for
+                      players to treasure and feel deeper.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <section className="w-full max-w-container-max mx-auto px-gutter py-12 md:py-20">
+                <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-12 md:gap-gutter">
+                  <div className="md:col-span-5 md:col-start-2">
+                    <h3 className="font-headline-lg text-[42px] leading-[48px] text-primary md:text-[56px] md:leading-[64px]">
+                      Give traditions a modern twist
+                    </h3>
+                    <p className="mt-8 font-body-lg text-body-lg text-on-surface-variant">
+                      At Maztermind, we believe that everyone is a playmate at
+                      heart. To bring back the skills of game-making and the joy
+                      of playing in the old days when all the games were
+                      lovingly handmade, we give traditional board games new
+                      aesthetics using hand-picked materials and excellent
+                      craftsmanship.
+                    </p>
+                  </div>
+                  <div className="md:col-span-6 md:col-start-7">
+                    <img
+                      alt="Woodworking tools arranged in an artisan workshop"
+                      className="h-[360px] w-full object-cover md:h-[430px]"
+                      src={aboutImages.tools}
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <section className="w-full max-w-container-max mx-auto px-gutter py-12 md:py-24">
+                <h2 className="text-center font-headline-lg text-[44px] font-semibold leading-[52px] text-primary md:text-[56px] md:leading-[64px]">
+                  CORE VALUE
+                </h2>
+                <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-3">
+                  {coreValues.map((value) => (
+                    <article key={value.title} className="text-center">
+                      <img
+                        alt={`${value.title.toLowerCase()} at Maztermind`}
+                        className="h-[360px] w-full object-cover md:h-[430px]"
+                        src={value.image}
+                      />
+                      <h3 className="mt-8 font-headline-md text-[30px] font-semibold leading-9 text-primary">
+                        {value.title}
+                      </h3>
+                      <p className="mt-6 font-body-lg text-body-lg text-on-surface-variant">
+                        {value.description}
+                      </p>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            </main>
+            <Footer />
+          </div>
+        );
+      };
+
+      const ProductPage = ({ cartCount, onCartOpen, onAddToCart }) => {
+        const { productId } = ReactRouterDOM.useParams(); // Hoặc useParams() tuỳ cách bạn import
+        const selectedProduct =
+          products.find((product) => product.id === productId) || products[0];
+
+        const relatedProducts = products.filter(
+          (product) => product.id !== selectedProduct.id,
+        );
+
+        // 1. CHUẨN BỊ MẢNG HÌNH ẢNH:
+        // Lấy mảng images, nếu bạn chưa cập nhật data thì tạm thời lấy thuộc tính image cũ bọc vào mảng
+        const productImages = selectedProduct.images || [
+          selectedProduct.image,
+          selectedProduct.image,
+          selectedProduct.image,
+          selectedProduct.image,
+        ];
+
+        // 2. KHAI BÁO STATE CHO ẢNH CHÍNH
+        const [activeImage, setActiveImage] = React.useState(productImages[0]);
+
+        React.useEffect(() => {
+          window.scrollTo(0, 0);
+        }, [productId]);
+
+        // 3. RESET ẢNH KHI ĐỔI SẢN PHẨM (Ví dụ bấm từ mục Related Products)
+        React.useEffect(() => {
+          setActiveImage(
+            (selectedProduct.images || [selectedProduct.image])[0],
+          );
+        }, [selectedProduct]);
+
+        return (
+          <div className="flex flex-col min-h-screen">
+            <TopNav cartCount={cartCount} onCartOpen={onCartOpen} />
+            <main className="flex-grow w-full max-w-container-max mx-auto px-4 md:px-gutter py-8 flex flex-col gap-16 md:gap-section-padding-desktop">
+              <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-gutter">
+                {/* BẮT ĐẦU KHU VỰC ĐƯỢC CHỈNH SỬA: IMAGE GALLERY */}
+                <div className="md:col-span-7 flex flex-col gap-4">
+                  {/* Ảnh chính to */}
+                  <div className="w-full rounded-xl overflow-hidden shadow-[0_32px_64px_-16px_rgba(26,26,26,0.05)] h-[400px] md:h-[600px] bg-surface-container relative group cursor-zoom-in">
+                    <img
+                      alt={selectedProduct.name}
+                      className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
+                      src={activeImage}
+                    />
+                  </div>
+
+                  {/* Dải ảnh nhỏ bên dưới */}
+                  <div className="grid grid-cols-4 gap-4">
+                    {productImages.map((img, index) => (
+                      <div
+                        key={index}
+                        onClick={() => setActiveImage(img)}
+                        className={`rounded-xl overflow-hidden bg-surface-container h-[80px] md:h-[120px] cursor-pointer border-2 transition-all duration-200 ${
+                          activeImage === img
+                            ? "border-burnished-gold opacity-100" // Hiệu ứng viền vàng cho ảnh đang chọn
+                            : "border-transparent opacity-60 hover:opacity-100 hover:border-outline/50"
+                        }`}
+                      >
+                        <img
+                          alt={`${selectedProduct.name} detail ${index + 1}`}
+                          className="w-full h-full object-cover"
+                          src={img}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* KẾT THÚC KHU VỰC CHỈNH SỬA */}
+
+                <div className="md:col-span-5 flex flex-col justify-center">
+                  <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-charcoal-ink mb-4">
+                    {selectedProduct.name}
+                  </h1>
+                  <div className="font-body-lg text-body-lg text-deep-walnut mb-8">
+                    {formatPrice(selectedProduct.price)}
+                  </div>
+                  <p className="font-body-md text-body-md text-on-surface-variant mb-10 leading-relaxed">
+                    {selectedProduct.description}
+                  </p>
+                  <div className="flex flex-col gap-4">
+                    <button
+                      onClick={() => onAddToCart(selectedProduct)}
+                      className="w-full bg-burnished-gold text-charcoal-ink font-label-sm text-label-sm uppercase py-4 px-8 rounded flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-sm"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">
+                        add_shopping_cart
+                      </span>{" "}
+                      Add to Cart
+                    </button>
+                    <button
+                      onClick={onCartOpen}
+                      className="w-full border border-outline/30 bg-transparent text-primary font-label-sm text-label-sm uppercase py-4 px-8 rounded flex items-center justify-center gap-2 hover:bg-surface-container-low transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">
+                        shopping_bag
+                      </span>{" "}
+                      View Cart
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              <div className="w-full flex flex-col shadow-sm">
+                {/* KHỐI 1: CHỮ TRÁI - ẢNH PHẢI (Feature Section) */}
+                {selectedProduct.featureSection && (
+                  <section className="flex flex-col md:flex-row w-full overflow-hidden">
+                    {/* Cột chữ (Nằm bên trái trên Desktop) */}
+                    <div className="w-full md:w-1/2 h-auto md:h-[500px] bg-[#f4f1ea] p-10 md:p-16 flex flex-col justify-center items-center text-center">
+                      <h2 className="font-headline-lg text-4xl text-charcoal-ink mb-6">
+                        {selectedProduct.featureSection.title}
+                      </h2>
+                      <p className="font-body-md md:font-body-lg text-on-surface-variant leading-relaxed max-w-lg">
+                        {selectedProduct.featureSection.description}
+                      </p>
+                    </div>
+
+                    {/* Cột ảnh (Nằm bên phải trên Desktop) */}
+                    <div className="w-full md:w-1/2 h-[350px] md:h-[500px]">
+                      <img
+                        alt="Feature detail"
+                        className="w-full h-full object-cover"
+                        src={selectedProduct.featureSection.image}
+                      />
+                    </div>
+                  </section>
+                )}
+
+                {/* KHỐI 2: ẢNH TRÁI - CHỮ PHẢI (Gift Section) */}
+                {selectedProduct.giftSection && (
+                  <section className="flex flex-col md:flex-row w-full overflow-hidden">
+                    {/* Cột ảnh (Nằm bên trái trên Desktop) */}
+                    <div className="w-full md:w-1/2 h-[350px] md:h-[500px]">
+                      <img
+                        alt="Gift packaging"
+                        className="w-full h-full object-cover"
+                        src={selectedProduct.giftSection.image}
+                      />
+                    </div>
+
+                    {/* Cột chữ (Nằm bên phải trên Desktop) */}
+                    <div className="w-full md:w-1/2 h-auto md:h-[500px] bg-[#f4f1ea] p-10 md:p-16 flex flex-col justify-center items-center text-center">
+                      <h2 className="font-headline-lg text-4xl text-charcoal-ink mb-6">
+                        {selectedProduct.giftSection.title}
+                      </h2>
+                      <p className="font-body-md md:font-body-lg text-on-surface-variant leading-relaxed max-w-lg">
+                        {selectedProduct.giftSection.description}
+                      </p>
+                    </div>
+                  </section>
+                )}
+              </div>
+
+              {/* ... (Các phần Specifications và Related Products của bạn giữ nguyên không đổi) ... */}
+              <section className="grid grid-cols-1 gap-8 md:grid-cols-12 md:gap-gutter">
+                <div className="md:col-span-5">
+                  <p className="font-label-sm text-label-sm uppercase text-on-surface-variant">
+                    PRODUCT DETAILS
+                  </p>
+                  <h2 className="mt-3 font-headline-lg-mobile text-headline-lg-mobile text-charcoal-ink md:font-headline-lg md:text-headline-lg">
+                    Product specification
+                  </h2>
+                </div>
+                <div className="md:col-span-7 bg-surface-container-low px-5 py-2 md:px-10 md:py-4">
+                  {selectedProduct.specifications &&
+                    selectedProduct.specifications.map((group) => (
+                      <div
+                        key={group.label}
+                        className="grid grid-cols-1 gap-4 border-b border-outline-variant py-6 last:border-b-0 md:grid-cols-[180px_1fr] md:gap-8"
+                      >
+                        <h3 className="font-title-lg text-[18px] leading-7 text-charcoal-ink">
+                          {group.label}
+                        </h3>
+                        <div className="space-y-4 font-body-lg text-body-lg text-on-surface-variant">
+                          {group.items.map((item) => (
+                            <p key={item}>- {item}</p>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </section>
+
+              <section>
+                <div className="mb-8 flex items-end justify-between gap-6">
+                  <div>
+                    <p className="font-label-sm text-label-sm text-on-surface-variant">
+                      COMPLETE THE SET
+                    </p>
+                    <h2 className="mt-2 font-headline-md text-headline-md text-primary">
+                      Add both pieces to your cart
+                    </h2>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-gutter md:grid-cols-2">
+                  {relatedProducts.map((product) => (
+                    <article
+                      key={product.id}
+                      className="grid grid-cols-[120px_1fr] gap-5 border border-outline/10 bg-surface-container-low p-4"
+                    >
+                      <img
+                        alt={product.name}
+                        className="h-[120px] w-[120px] rounded object-cover"
+                        src={product.images ? product.images[0] : product.image}
+                      />
+                      <div className="flex flex-col justify-between">
+                        <div>
+                          <p className="font-label-sm text-label-sm text-on-surface-variant">
+                            {product.category}
+                          </p>
+                          <h3 className="mt-1 font-body-lg text-body-lg text-primary">
+                            {product.name}
+                          </h3>
+                          <p className="mt-2 font-body-md text-body-md text-deep-walnut">
+                            {formatPrice(product.price)}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => onAddToCart(product)}
+                          className="mt-4 flex w-full items-center justify-center gap-2 rounded bg-primary-container px-4 py-3 font-label-sm text-label-sm uppercase text-on-primary transition-opacity hover:opacity-90"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">
+                            add
+                          </span>
+                          Add Item
+                        </button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            </main>
+            <Footer />
+          </div>
+        );
+      };
+      const App = () => {
+        const [cartItems, setCartItems] = useState([]);
+        const [isCartOpen, setIsCartOpen] = useState(false);
+
+        const addToCart = (product) => {
+          setCartItems((currentItems) => {
+            if (currentItems.some((item) => item.id === product.id)) {
+              return currentItems;
+            }
+            return [...currentItems, product];
+          });
+          setIsCartOpen(true);
+        };
+
+        const removeFromCart = (productId) => {
+          setCartItems((currentItems) =>
+            currentItems.filter((item) => item.id !== productId),
+          );
+        };
+
+        const checkoutOnStripe = () => {
+          if (cartItems.length === 0) return;
+          window.location.href = STRIPE_CHECKOUT_URL;
+        };
+
+        return (
+          <MemoryRouter>
+            <WelcomeBannerModal />
+            <CartDrawer
+              isOpen={isCartOpen}
+              items={cartItems}
+              onClose={() => setIsCartOpen(false)}
+              onRemove={removeFromCart}
+              onCheckout={checkoutOnStripe}
+            />
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <HomePage
+                    cartCount={cartItems.length}
+                    onCartOpen={() => setIsCartOpen(true)}
+                  />
+                }
+              />
+              <Route
+                path="/product"
+                element={
+                  <ProductPage
+                    cartCount={cartItems.length}
+                    onCartOpen={() => setIsCartOpen(true)}
+                    onAddToCart={addToCart}
+                  />
+                }
+              />
+              <Route
+                path="/our-story"
+                element={
+                  <OurStoryPage
+                    cartCount={cartItems.length}
+                    onCartOpen={() => setIsCartOpen(true)}
+                  />
+                }
+              />
+              <Route
+                path="/product/:productId"
+                element={
+                  <ProductPage
+                    cartCount={cartItems.length}
+                    onCartOpen={() => setIsCartOpen(true)}
+                    onAddToCart={addToCart}
+                  />
+                }
+              />
+            </Routes>
+          </MemoryRouter>
+        );
+      };
+
+      const root = createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
